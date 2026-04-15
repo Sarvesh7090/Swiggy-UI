@@ -1,8 +1,28 @@
 import 'package:flutter/material.dart';
 
-class SwiggyUI extends StatelessWidget {
-  const SwiggyUI({super.key});
+import '../wigdet/bottom_sheet.dart';
+import '../wigdet/top_sheet.dart';
 
+class SwiggyUI extends StatefulWidget {
+   const SwiggyUI({super.key});
+
+  @override
+  State<SwiggyUI> createState() => _SwiggyUIState();
+}
+
+class _SwiggyUIState extends State<SwiggyUI> {
+ScrollController scrollController = ScrollController();
+
+bool showTop = false;
+@override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    setState(() {
+      showTop = true;
+    });
+
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -10,7 +30,6 @@ class SwiggyUI extends StatelessWidget {
         children: [
           Stack(
             children: [
-              /// 🔥 BACKGROUND (Restaurant Image)
               Container(
                 height: 300,
                 decoration: BoxDecoration(
@@ -22,7 +41,7 @@ class SwiggyUI extends StatelessWidget {
                 ),
               ),
 
-              /// 🔥 RESTAURANT INFO
+
               Positioned(
                 top: 250,
                 left: 16,
@@ -36,7 +55,21 @@ class SwiggyUI extends StatelessWidget {
                   ),
                 ),
               ),
+              // AnimatedPositioned(
+              //   duration: Duration(milliseconds: 300),
+              //   top: showTop ? 0 : -200,
+              //   left: 0,
+              //   right: 0,
+              //   child: showTopSheet(context: context,showTop: showTop) ,
+              // ),
+
             ],
+          ),
+          ElevatedButton(
+            onPressed: () {
+              return showTopSheet(context: context, showTop: true);
+            },
+            child: Text("Show top sheet"),
           ),
           ElevatedButton(
           onPressed: () {
@@ -56,90 +89,7 @@ class SwiggyUI extends StatelessWidget {
     );
   }
 
-  Widget buildBottomSheet() {
-    return DraggableScrollableSheet(
-      builder: (BuildContext context, ScrollController scrollController) {
-        return Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-              boxShadow: [
-                BoxShadow(color: Colors.black12, blurRadius: 10),
-              ],),
-          child: CustomScrollView(
-            controller: scrollController,
-            slivers: [
-              SliverToBoxAdapter(
-                child: Container(
-                  height: 5,
-                  // width: 5,
-                  decoration: BoxDecoration(
-                    color: Colors.grey,
-                  ),
-                ),
-              ),
-              SliverAppBar(
-                pinned: true,
-                backgroundColor: Colors.white,
-              title: Text("Menu",style: TextStyle(color: Colors.black)),
-              ),
-              SliverList(
-                  delegate: SliverChildBuilderDelegate((context,index){
-                  return foodItem(index);
-                  },
-                  childCount: 15
-                  ))
-            ],
-          ),
-        );
-    },);
-  }
 
-  Widget foodItem(int index) {
-    return Padding(
-      padding: const EdgeInsets.all(0),
-      child: Row(
-        children: [
 
-          /// IMAGE
-          ClipRRect(
-            borderRadius: BorderRadius.circular(0),
-            child: Image.network(
-              "https://media.istockphoto.com/id/1433432507/photo/healthy-eating-plate-with-vegan-or-vegetarian-food-in-woman-hands-healthy-plant-based-diet.jpg?s=2048x2048&w=is&k=20&c=m83OygDv_Fm9gjQvxsnEaPRd4_WC3q6vcpMBtSkauXM=",
-              height: 80,
-              width: 80,
-              fit: BoxFit.cover,
-            ),
-          ),
 
-          SizedBox(width: 12),
-
-          /// DETAILS
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Pizza Item $index",
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                  overflow: TextOverflow.ellipsis, // 🔥 important
-                ),
-                SizedBox(height: 5),
-                Text("₹199"),
-              ],
-            ),
-          ),
-
-          /// BUTTON
-          SizedBox(
-            width: 70, // ✅ FIXED WIDTH
-            child: ElevatedButton(
-              onPressed: () {},
-              child: Text("ADD"),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 }
